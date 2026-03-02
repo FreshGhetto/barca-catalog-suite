@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.idea/
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project temp/output
+.barca_tmp/
+debug_runs/
+output/
+data/temp/
+data/processed/
+*.jpg
+*.jpeg
+*.png
+*.zip
+
+# Build artifacts
+dist/
+build/
+*.spec

@@ -1,0 +1,38 @@
+name: Windows Portable Build
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build (onedir)
+        run: |
+          pyinstaller --noconfirm --clean --onedir --name BarcaCatalogSuite run_app.py
+
+      - name: Zip portable folder
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "dist\BarcaCatalogSuite\*" -DestinationPath "BarcaCatalogSuite_windows_portable.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BarcaCatalogSuite_windows_portable
+          path: BarcaCatalogSuite_windows_portable.zip

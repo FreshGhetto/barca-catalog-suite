@@ -8,6 +8,7 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,17 +23,18 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build (onedir)
+      - name: Build (onedir using spec)
         run: |
-          pyinstaller --noconfirm --clean --onedir --name BarcaCatalogSuite run_app.py
+          pyinstaller --noconfirm --clean BarcaCatalogSuite.spec
 
       - name: Zip portable folder
         shell: pwsh
         run: |
           Compress-Archive -Path "dist\BarcaCatalogSuite\*" -DestinationPath "BarcaCatalogSuite_windows_portable.zip"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
-          name: BarcaCatalogSuite_windows_portable
-          path: BarcaCatalogSuite_windows_portable.zip
+          files: BarcaCatalogSuite_windows_portable.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
